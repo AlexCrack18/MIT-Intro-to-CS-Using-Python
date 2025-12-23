@@ -36,7 +36,7 @@ def is_heap(tree, compare_func):
     Output:
         True if the entire tree satisfies the compare_func function; False otherwise
     '''
-    if tree.get_left_child() is None and tree.get_right_child() is None:
+    if tree is None:
         return True
     
     left_is_heap, right_is_heap = True, True
@@ -46,9 +46,9 @@ def is_heap(tree, compare_func):
         
     if tree.get_right_child() is not None:
         right_is_heap = compare_func(tree.get_right_child().get_value(), tree.get_value())
-        
+
     if left_is_heap and right_is_heap and is_heap(tree.get_right_child(), compare_func) and is_heap(tree.get_left_child(), compare_func):
-        return True 
+         return True 
     return False
 
 
@@ -56,9 +56,10 @@ def is_heap(tree, compare_func):
 if __name__ == '__main__':
     # You can use this part for your own testing and debugging purposes.
     # IMPORTANT: Do not erase the pass statement below if you do not add your own code]
+    tr1 = Node(5,Node(15,None,Node(16,Node(30),Node(17))),Node(6,Node(20,None,Node(45)),Node(11)))
     def comp_func(child_value, parent_value):
         if child_value > parent_value:
             return True
         return False
-    print(is_heap(tree2, comp_func))
+    print(is_heap(tr1, comp_func))
     pass
