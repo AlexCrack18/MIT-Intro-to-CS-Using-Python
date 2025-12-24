@@ -44,13 +44,9 @@ class Message(object):
 
         Returns: (string) the shifted character with ASCII value in the range [32, 126]
         '''
-        char = ord(char)
-        if (char + shift) > 126:
-            return chr(31 + (char + shift) % 126)
-        elif (char + shift) < 32:
-            x = 32 % (char + shift)
-            return chr(127 - x)
-        return chr(char + shift) 
+        char = ord(char) + shift
+        char = 32 + (char - 32) % 95
+        return chr(char) 
 
     def apply_pad(self, pad):
         '''
