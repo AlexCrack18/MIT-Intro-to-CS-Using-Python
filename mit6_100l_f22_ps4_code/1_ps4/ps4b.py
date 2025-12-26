@@ -80,7 +80,11 @@ class PlaintextMessage(Message):
                 or generated randomly using self.generate_pad() if pad is None)
             the ciphertext (string, input_text encrypted using the pad)
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        super().__init__(input_text)
+        if pad is None:
+            self.pad = self.generate_pad()
+        else:
+            self.pad = pad.copy()
 
     def __repr__(self):
         '''
@@ -101,7 +105,11 @@ class PlaintextMessage(Message):
 
         Returns: (list of integers) the new one time pad
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        pad = []
+        for _ in self.message_text:
+            pad.append(random.randint(0,109))
+        return pad.copy()
+        
 
     def get_pad(self):
         '''
@@ -109,7 +117,7 @@ class PlaintextMessage(Message):
 
         Returns: (list of integers) a COPY of your pad
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        return self.pad.copy()
 
     def get_ciphertext(self):
         '''
@@ -117,7 +125,7 @@ class PlaintextMessage(Message):
 
         Returns: (string) the ciphertext
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        return self.apply_pad(self.get_pad())
 
     def change_pad(self, new_pad):
         '''
@@ -129,7 +137,7 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        self.pad = new_pad
 
 
 class EncryptedMessage(Message):
@@ -142,7 +150,7 @@ class EncryptedMessage(Message):
         an EncryptedMessage object inherits from Message. It has one attribute:
             the message text (ciphertext)
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        super().__init__(input_text)
 
     def __repr__(self):
         '''
@@ -162,9 +170,12 @@ class EncryptedMessage(Message):
 
         Returns: (PlaintextMessage) the decrypted message (containing the pad)
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        negative_pad = [x * -1 for x in pad]
+        self.message_text = self.apply_pad(negative_pad)
 
 if __name__ == '__main__':
-    mess = Message("Hello")
-    print(mess.get_text())
-    print(mess.shift_char(' ', -1)) 
+    mess = PlaintextMessage("Hello")
+    print(mess.get_pad())
+    print(mess.get_ciphertext())
+    mess2 = EncryptedMessage(mess.get_ciphertext())
+    print (mess2.decrypt_message(mess.get_pad()))
